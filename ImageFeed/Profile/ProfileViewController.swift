@@ -15,13 +15,13 @@ final class ProfileViewController: UIViewController {
         outputProfileView(
             userImage: UIImage(resource: .user),
             userName: "Екатерина Новикова",
-            userNikname: "@ekaterina_nov",
+            userNickname: "@ekaterina_nov",
             userAbout: "Hello, World!"
         )
     }
     
     // MARK: - Private Methods
-    private func outputProfileView(userImage: UIImage, userName: String, userNikname: String, userAbout: String) {
+    private func outputProfileView(userImage: UIImage, userName: String, userNickname: String, userAbout: String) {
         view.backgroundColor = UIColor.ypBlackIOS
         
         let userImageView = UIImageView(image: userImage)
@@ -35,12 +35,12 @@ final class ProfileViewController: UIViewController {
         userNameLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(userNameLabel)
         
-        let userNiknameLabel = UILabel()
-        userNiknameLabel.text = userNikname
-        userNiknameLabel.textColor = UIColor.ypGrayIOS
-        userNiknameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
-        userNiknameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(userNiknameLabel)
+        let userNicknameLabel = UILabel()
+        userNicknameLabel.text = userNickname
+        userNicknameLabel.textColor = UIColor.ypGrayIOS
+        userNicknameLabel.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        userNicknameLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(userNicknameLabel)
         
         let userAboutLabel = UILabel()
         userAboutLabel.text = userAbout
@@ -64,12 +64,12 @@ final class ProfileViewController: UIViewController {
             userNameLabel.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 8),
             userNameLabel.heightAnchor.constraint(equalToConstant: 18),
             
-            userNiknameLabel.leadingAnchor.constraint(equalTo: userImageView.leadingAnchor),
-            userNiknameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 8),
-            userNiknameLabel.heightAnchor.constraint(equalToConstant: 18),
+            userNicknameLabel.leadingAnchor.constraint(equalTo: userImageView.leadingAnchor),
+            userNicknameLabel.topAnchor.constraint(equalTo: userNameLabel.bottomAnchor, constant: 8),
+            userNicknameLabel.heightAnchor.constraint(equalToConstant: 18),
             
             userAboutLabel.leadingAnchor.constraint(equalTo: userImageView.leadingAnchor),
-            userAboutLabel.topAnchor.constraint(equalTo: userNiknameLabel.bottomAnchor, constant: 8),
+            userAboutLabel.topAnchor.constraint(equalTo: userNicknameLabel.bottomAnchor, constant: 8),
             userAboutLabel.heightAnchor.constraint(equalToConstant: 18),
             
             exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
