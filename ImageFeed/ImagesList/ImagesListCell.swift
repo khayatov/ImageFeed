@@ -13,6 +13,6 @@ final class ImagesListCell: UITableViewCell {
     @IBOutlet var likeButton: UIButton!
     @IBOutlet var dateLabel: UILabel!
     
-    // MARK - Public Properties
+    // MARK: - Public Properties
     static let reuseIdentifier = "ImagesListCell"
 }
