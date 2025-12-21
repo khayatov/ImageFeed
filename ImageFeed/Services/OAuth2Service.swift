@@ -22,9 +22,15 @@ final class OAuth2Service {
     
     // MARK: - Public Methods
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
+        let fulfillCompletionOnTheMainThread: (Result<String, Error>) -> Void = { result in
+            DispatchQueue.main.async {
+                completion(result)
+            }
+        }
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
             print("Ошибка получения кода")
-            completion(.failure(ServiceError.codeError))
+            fulfillCompletionOnTheMainThread(.failure(ServiceError.codeError))
             return
         }
         
@@ -34,14 +40,14 @@ final class OAuth2Service {
                 do {
                     let decodedData = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
                     self.oAuth2TokenStorage.token = decodedData.accessToken
-                    completion(.success(decodedData.accessToken))
+                    fulfillCompletionOnTheMainThread(.success(decodedData.accessToken))
                 } catch {
                     print("Ошибка декодирования: \(error.localizedDescription)")
-                    completion(.failure(error))
+                    fulfillCompletionOnTheMainThread(.failure(error))
                 }
             case .failure(let error):
                 print("Ошибка запроса: \(error.localizedDescription)")
-                completion(.failure(error))
+                fulfillCompletionOnTheMainThread(.failure(error))
             }
         }
         task.resume()

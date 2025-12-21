@@ -12,5 +12,5 @@ enum Constants {
     static let secretKey = "AdDeISoJmnGJNO8wN2OfVJLi1J0-bZ7k3-qcC8LULG4"
     static let redirectURI = "urn:ietf:wg:oauth:2.0:oob"
     static let accessScope = "public+read_user+write_likes"
-    static let defaultBaseURL = URL(string: "https://api.unsplash.com")!
+    static let defaultBaseURL = URL(string: "https://api.unsplash.com")
 }
