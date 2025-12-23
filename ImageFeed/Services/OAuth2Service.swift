@@ -14,8 +14,12 @@ final class OAuth2Service {
     // MARK: - Private Properties
     private enum ServiceError: Error {
         case codeError
+        case invalidRequest
     }
     private let oAuth2TokenStorage = OAuth2TokenStorage()
+    private let urlSession = URLSession.shared
+    private var lastTask: URLSessionTask?
+    private var lastCode: String?
     
     // MARK: - Initializers
     private init() {}
@@ -23,13 +27,25 @@ final class OAuth2Service {
     // MARK: - Public Methods
     func fetchOAuthToken(code: String, completion: @escaping (Result<String, Error>) -> Void) {
         let fulfillCompletionOnTheMainThread: (Result<String, Error>) -> Void = { result in
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
                 completion(result)
+                
+                lastTask = nil
+                lastCode = nil
             }
         }
         
+        assert(Thread.isMainThread)
+        guard lastCode != code else {
+            print("Ошибка: повторный запрос токена")
+            fulfillCompletionOnTheMainThread(.failure(ServiceError.invalidRequest))
+            return
+        }
+        lastTask?.cancel()
+        lastCode = code
+        
         guard let request = makeOAuthTokenRequest(code: code) else {
-            print("Ошибка получения кода")
+            print("Ошибка получения request")
             fulfillCompletionOnTheMainThread(.failure(ServiceError.codeError))
             return
         }
@@ -50,6 +66,7 @@ final class OAuth2Service {
                 fulfillCompletionOnTheMainThread(.failure(error))
             }
         }
+        lastTask = task
         task.resume()
     }
     
