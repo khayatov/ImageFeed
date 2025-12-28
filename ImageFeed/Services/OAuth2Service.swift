@@ -16,7 +16,7 @@ final class OAuth2Service {
         case codeError
         case invalidRequest
     }
-    private let oAuth2TokenStorage = OAuth2TokenStorage()
+    private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private let urlSession = URLSession.shared
     private var lastTask: URLSessionTask?
     private var lastCode: String?
