@@ -40,8 +40,15 @@ final class AuthViewController: UIViewController {
         }
     }
     
-    // MARK: - Public Methods
-    func showAuthErrorAlert() {
+    // MARK: - Private Methods
+    private func configureBackButton() {
+        navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
+        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(resource: .navBackButton)
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem?.tintColor = UIColor.ypBlackIOS
+    }
+    
+    private func showAuthErrorAlert() {
         let alertController = UIAlertController(
             title: "Что-то пошло не так",
             message: "Не удалось войти в систему",
@@ -51,26 +58,17 @@ final class AuthViewController: UIViewController {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-    
-    // MARK: - Private Methods
-    private func configureBackButton() {
-        navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
-        navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(resource: .navBackButton)
-        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
-        navigationItem.backBarButtonItem?.tintColor = UIColor.ypBlackIOS
-    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
     // MARK: - Public Methods
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
-        vc.dismiss(animated: true)
         UIBlockingProgressHUD.show()
         
         oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
-            UIBlockingProgressHUD.dismiss()
-            
             guard let self else { return }
+            
+            UIBlockingProgressHUD.dismiss()
             
             switch result {
             case .success(let token):

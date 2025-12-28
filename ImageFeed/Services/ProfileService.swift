@@ -44,7 +44,8 @@ final class ProfileService {
                 switch result {
                 case .success(let profile):
                     self.profile = profile
-                case .failure(_):
+                case .failure(let error):
+                    print("[fetchProfile]: Ошибка: \(error.localizedDescription)")
                     self.profile = nil
                 }
             }

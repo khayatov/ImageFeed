@@ -47,7 +47,8 @@ final class ProfileImageService {
                             name: ProfileImageService.didChangeNotification,
                             object: self,
                             userInfo: ["URL": profileImageURL])
-                case .failure(_):
+                case .failure(let error):
+                    print("[fetchProfileImageURL]: Ошибка: \(error.localizedDescription)")
                     self.avatarURL = nil
                 }
             }

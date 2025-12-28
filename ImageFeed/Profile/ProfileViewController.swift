@@ -19,7 +19,7 @@ final class ProfileViewController: UIViewController {
         super.viewDidLoad()
         
         if let profile = profileService.profile {
-            outputProfileView(
+            setupView(
                 userName: profile.name.isEmpty ? "Имя не указано" : profile.name,
                 userNickname: profile.loginName.isEmpty ? "@неизвестный_пользователь" : profile.loginName,
                 userAbout: ((profile.bio?.isEmpty ?? true) ? "Профиль не заполнен" : profile.bio) ?? "Профиль не заполнен"
@@ -59,7 +59,7 @@ final class ProfileViewController: UIViewController {
             ])
     }
     
-    private func outputProfileView(userName: String, userNickname: String, userAbout: String) {
+    private func setupView(userName: String, userNickname: String, userAbout: String) {
         view.backgroundColor = UIColor.ypBlackIOS
         
         userImageView.translatesAutoresizingMaskIntoConstraints = false
