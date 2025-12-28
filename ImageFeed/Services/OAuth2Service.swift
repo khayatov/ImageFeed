@@ -37,7 +37,7 @@ final class OAuth2Service {
         
         assert(Thread.isMainThread)
         guard lastCode != code else {
-            print("Ошибка: повторный запрос токена")
+            print("[fetchOAuthToken]: Ошибка: повторный запрос токена")
             fulfillCompletionOnTheMainThread(.failure(ServiceError.invalidRequest))
             return
         }
@@ -45,24 +45,21 @@ final class OAuth2Service {
         lastCode = code
         
         guard let request = makeOAuthTokenRequest(code: code) else {
-            print("Ошибка получения request")
+            print("[fetchOAuthToken]: Ошибка получения request")
             fulfillCompletionOnTheMainThread(.failure(ServiceError.codeError))
             return
         }
         
-        let task = URLSession.shared.data(for: request) { (result: Result<Data, Error>) in
+        let task = urlSession.objectTask(for: request) { [weak self] (result: Result<OAuthTokenResponseBody, Error>) in
+            guard let self = self else { return }
+            
             switch result {
-            case .success(let data):
-                do {
-                    let decodedData = try JSONDecoder().decode(OAuthTokenResponseBody.self, from: data)
-                    self.oAuth2TokenStorage.token = decodedData.accessToken
-                    fulfillCompletionOnTheMainThread(.success(decodedData.accessToken))
-                } catch {
-                    print("Ошибка декодирования: \(error.localizedDescription)")
-                    fulfillCompletionOnTheMainThread(.failure(error))
-                }
+            case .success(let body):
+                self.oAuth2TokenStorage.token = body.accessToken
+                fulfillCompletionOnTheMainThread(.success(body.accessToken))
+                
             case .failure(let error):
-                print("Ошибка запроса: \(error.localizedDescription)")
+                print("[fetchOAuthToken]: Ошибка запроса: \(error.localizedDescription)")
                 fulfillCompletionOnTheMainThread(.failure(error))
             }
         }
@@ -73,7 +70,7 @@ final class OAuth2Service {
     // MARK: - Private Methods
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
-            print("Ошибка инициализации URLComponents")
+            print("[makeOAuthTokenRequest]: Ошибка инициализации URLComponents")
             return nil
         }
         
@@ -86,7 +83,7 @@ final class OAuth2Service {
         ]
         
         guard let authTokenUrl = urlComponents.url else {
-            print("Ошибка: URLComponents не сформировал url")
+            print("[makeOAuthTokenRequest]: Ошибка: URLComponents не сформировал url")
             return nil
         }
         

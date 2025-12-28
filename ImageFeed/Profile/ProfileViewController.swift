@@ -6,25 +6,62 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
+    // MARK: - Private Properties
+    private let profileService = ProfileService.shared
+    private var profileImageServiceObserver: NSObjectProtocol?
+    private let userImageView = UIImageView(image: UIImage(resource: .placeholder))
+    
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        outputProfileView(
-            userImage: UIImage(resource: .user),
-            userName: "Екатерина Новикова",
-            userNickname: "@ekaterina_nov",
-            userAbout: "Hello, World!"
-        )
+        if let profile = profileService.profile {
+            outputProfileView(
+                userName: profile.name.isEmpty ? "Имя не указано" : profile.name,
+                userNickname: profile.loginName.isEmpty ? "@неизвестный_пользователь" : profile.loginName,
+                userAbout: ((profile.bio?.isEmpty ?? true) ? "Профиль не заполнен" : profile.bio) ?? "Профиль не заполнен"
+            )
+        }
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self = self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
+        
     }
     
     // MARK: - Private Methods
-    private func outputProfileView(userImage: UIImage, userName: String, userNickname: String, userAbout: String) {
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let imageUrl = URL(string: profileImageURL)
+        else { return }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 35)
+        userImageView.kf.indicatorType = .activity
+        userImageView.kf.setImage(
+            with: imageUrl,
+            placeholder: UIImage(resource: .placeholder),
+            options: [
+                .processor(processor),
+                .scaleFactor(UIScreen.main.scale),
+                .cacheOriginalImage,
+                .forceRefresh
+            ])
+    }
+    
+    private func outputProfileView(userName: String, userNickname: String, userAbout: String) {
         view.backgroundColor = UIColor.ypBlackIOS
         
-        let userImageView = UIImageView(image: userImage)
         userImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(userImageView)
         

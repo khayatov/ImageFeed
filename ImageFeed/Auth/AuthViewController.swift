@@ -40,6 +40,18 @@ final class AuthViewController: UIViewController {
         }
     }
     
+    // MARK: - Public Methods
+    func showAuthErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: - Private Methods
     private func configureBackButton() {
         navigationController?.navigationBar.backIndicatorImage = UIImage(resource: .navBackButton)
@@ -62,11 +74,12 @@ extension AuthViewController: WebViewViewControllerDelegate {
             
             switch result {
             case .success(let token):
-                print("Токен получен: \(token)")
+                print("[webViewViewController]: Токен получен: \(token)")
                 
                 delegate?.didAuthenticate(self)
             case let .failure(error):
-                print("Ошибка: токен не получен - \(error.localizedDescription)")
+                print("[webViewViewController]: Ошибка: токен не получен - \(error.localizedDescription)")
+                showAuthErrorAlert()
             }
         }
         
