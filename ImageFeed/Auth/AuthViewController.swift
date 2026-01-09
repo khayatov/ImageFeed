@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol AuthViewControllerDelegate: AnyObject {
-    func didAuthenticate(_ vc: AuthViewController)
-}
-
 final class AuthViewController: UIViewController {
     // MARK: - Private Properties
     private let webViewSegueIdentifier = "ShowWebView"
@@ -50,7 +46,7 @@ final class AuthViewController: UIViewController {
     
     private func showAuthErrorAlert() {
         let alertController = UIAlertController(
-            title: "Что-то пошло не так",
+            title: "Что-то пошло не так(",
             message: "Не удалось войти в систему",
             preferredStyle: .alert
         )

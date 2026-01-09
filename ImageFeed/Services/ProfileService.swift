@@ -7,20 +7,6 @@
 
 import Foundation
 
-struct Profile {
-    let username: String
-    let name: String
-    let loginName: String
-    let bio: String?
-}
-
-struct ProfileResult: Codable {
-    let username: String
-    let firstName: String
-    let lastName: String
-    let bio: String?
-}
-
 final class ProfileService {
     // MARK: - Public Properties
     static let shared = ProfileService()
@@ -83,7 +69,7 @@ final class ProfileService {
     
     // MARK: - Private Methods
     private func makeProfileRequest(token: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/me") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURL)/me") else {
             print("[makeProfileRequest]: Ошибка инициализации URL")
             return nil
         }

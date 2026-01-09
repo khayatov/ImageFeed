@@ -7,16 +7,6 @@
 
 import Foundation
 
-struct ProfileImage: Codable {
-    let small: String
-    let medium: String
-    let large: String
-}
-
-struct UserResult: Codable {
-    let profileImage: ProfileImage
-}
-
 final class ProfileImageService {
     // MARK: - Public Properties
     static let shared = ProfileImageService()
@@ -80,7 +70,7 @@ final class ProfileImageService {
     
     // MARK: - Private Methods
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
-        guard let url = URL(string: "https://api.unsplash.com/users/\(username)") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURL)/users/\(username)") else {
             print("[makeProfileImageRequest]: Ошибка инициализации URL")
             return nil
         }
