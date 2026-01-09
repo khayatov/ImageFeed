@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol AuthViewControllerDelegate: AnyObject {
-    func didAuthenticate(_ vc: AuthViewController)
-}
-
 final class AuthViewController: UIViewController {
     // MARK: - Private Properties
     private let webViewSegueIdentifier = "ShowWebView"
@@ -47,21 +43,37 @@ final class AuthViewController: UIViewController {
         navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         navigationItem.backBarButtonItem?.tintColor = UIColor.ypBlackIOS
     }
+    
+    private func showAuthErrorAlert() {
+        let alertController = UIAlertController(
+            title: "Что-то пошло не так(",
+            message: "Не удалось войти в систему",
+            preferredStyle: .alert
+        )
+        let okAction = UIAlertAction(title: "Ок", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
+    }
 }
 
 extension AuthViewController: WebViewViewControllerDelegate {
     // MARK: - Public Methods
     func webViewViewController(_ vc: WebViewViewController, didAuthenticateWithCode code: String) {
+        UIBlockingProgressHUD.show()
+        
         oauth2Service.fetchOAuthToken(code: code) { [weak self] result in
             guard let self else { return }
             
+            UIBlockingProgressHUD.dismiss()
+            
             switch result {
             case .success(let token):
-                print("Токен получен: \(token)")
+                print("[webViewViewController]: Токен получен: \(token)")
                 
                 delegate?.didAuthenticate(self)
             case let .failure(error):
-                print("Ошибка: токен не получен - \(error.localizedDescription)")
+                print("[webViewViewController]: Ошибка: токен не получен - \(error.localizedDescription)")
+                showAuthErrorAlert()
             }
         }
         
