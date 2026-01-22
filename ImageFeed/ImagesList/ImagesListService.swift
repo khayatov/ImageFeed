@@ -11,7 +11,7 @@ internal import CoreGraphics
 final class ImagesListService {
     // MARK: - Public Properties
     static let shared = ImagesListService()
-    static let didChangeNotification = Notification.Name(rawValue: "ImagesListServiceDidChange");
+    static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
     
     // MARK: - Private Properties
     private(set) var photos: [Photo] = []
@@ -92,7 +92,7 @@ final class ImagesListService {
         let task = urlSession.data(for: request) { (result: Result<Data, Error>) in
             DispatchQueue.main.async { [self] in
                 switch result {
-                case .success(_):
+                case .success:
                     if let index = self.photos.firstIndex(where: { $0.id == photoId }) {
                         let photo = self.photos[index]
                         photos[index] = Photo(
@@ -134,7 +134,7 @@ final class ImagesListService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
@@ -146,7 +146,7 @@ final class ImagesListService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = isLike ? "POST" : "DELETE"
+        request.httpMethod = isLike ? HTTPMethod.post.rawValue : HTTPMethod.delete.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
