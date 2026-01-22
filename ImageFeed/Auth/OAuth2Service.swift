@@ -67,6 +67,12 @@ final class OAuth2Service {
         task.resume()
     }
     
+    func cleanData() {
+        lastTask?.cancel()
+        lastTask = nil
+        lastCode = nil
+    }
+    
     // MARK: - Private Methods
     private func makeOAuthTokenRequest(code: String) -> URLRequest? {
         guard var urlComponents = URLComponents(string: "https://unsplash.com/oauth/token") else {
@@ -88,7 +94,7 @@ final class OAuth2Service {
         }
         
         var request = URLRequest(url: authTokenUrl)
-        request.httpMethod = "POST"
+        request.httpMethod = HTTPMethod.post.rawValue
         return request
     }
 }

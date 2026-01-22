@@ -7,14 +7,6 @@
 
 import Foundation
 
-enum NetworkError: Error {
-    case httpStatusCode(Int)
-    case urlRequestError(Error)
-    case urlSessionError
-    case invalidRequest
-    case decodingError(Error)
-}
-
 extension URLSession {
     func data(
         for request: URLRequest,
@@ -59,9 +51,6 @@ extension URLSession {
         let task = data(for: request) { (result: Result<Data, Error>) in
             switch result {
             case .success(let data):
-                if let jsonString = String(data: data, encoding: .utf8) {
-                    print("[objectTask]: Полученные данные: \(jsonString)")
-                }
                 do {
                     let decodedData = try JSONDecoder.snakeCase.decode(T.self, from: data)
                     fulfillCompletionOnTheMainThread(.success(decodedData))

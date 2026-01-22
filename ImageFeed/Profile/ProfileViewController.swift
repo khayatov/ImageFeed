@@ -11,8 +11,9 @@ import Kingfisher
 final class ProfileViewController: UIViewController {
     // MARK: - Private Properties
     private let profileService = ProfileService.shared
+    private let profileLogoutService = ProfileLogoutService.shared
     private var profileImageServiceObserver: NSObjectProtocol?
-    private let userImageView = UIImageView(image: UIImage(resource: .placeholder))
+    private let userImageView = UIImageView(image: UIImage(resource: .avatar))
     
     // MARK: - Overrides Methods
     override func viewDidLoad() {
@@ -40,6 +41,26 @@ final class ProfileViewController: UIViewController {
     }
     
     // MARK: - Private Methods
+    @objc private func didTapLogoutButton(_ sender: Any) {
+        showLogoutAlert()
+    }
+    
+    private func showLogoutAlert() {
+        let alertController = UIAlertController(
+            title: "Пока, пока!",
+            message: "Уверены, что хотите выйти?",
+            preferredStyle: .alert
+        )
+        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
+            self.profileLogoutService.logout()
+        }
+        let noAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
+        
+        alertController.addAction(yesAction)
+        alertController.addAction(noAction)
+        present(alertController, animated: true, completion: nil)
+    }
+    
     private func updateAvatar() {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
@@ -50,7 +71,7 @@ final class ProfileViewController: UIViewController {
         userImageView.kf.indicatorType = .activity
         userImageView.kf.setImage(
             with: imageUrl,
-            placeholder: UIImage(resource: .placeholder),
+            placeholder: UIImage(resource: .avatar),
             options: [
                 .processor(processor),
                 .scaleFactor(UIScreen.main.scale),
@@ -86,10 +107,11 @@ final class ProfileViewController: UIViewController {
         userAboutLabel.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(userAboutLabel)
         
-        let exitButton = UIButton(type: .custom);
-        exitButton.setImage(UIImage(resource: .exit), for: .normal)
-        exitButton.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(exitButton)
+        let logoutButton = UIButton(type: .custom);
+        logoutButton.setImage(UIImage(resource: .exit), for: .normal)
+        logoutButton.translatesAutoresizingMaskIntoConstraints = false
+        logoutButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
+        view.addSubview(logoutButton)
         
         NSLayoutConstraint.activate([
             userImageView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
@@ -109,10 +131,10 @@ final class ProfileViewController: UIViewController {
             userAboutLabel.topAnchor.constraint(equalTo: userNicknameLabel.bottomAnchor, constant: 8),
             userAboutLabel.heightAnchor.constraint(equalToConstant: 18),
             
-            exitButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            exitButton.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor),
-            exitButton.widthAnchor.constraint(equalToConstant: 44),
-            exitButton.heightAnchor.constraint(equalToConstant: 44),
+            logoutButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            logoutButton.centerYAnchor.constraint(equalTo: userImageView.centerYAnchor),
+            logoutButton.widthAnchor.constraint(equalToConstant: 44),
+            logoutButton.heightAnchor.constraint(equalToConstant: 44),
         ])
     }
 }

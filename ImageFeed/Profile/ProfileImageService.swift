@@ -10,7 +10,7 @@ import Foundation
 final class ProfileImageService {
     // MARK: - Public Properties
     static let shared = ProfileImageService()
-    static let didChangeNotification = Notification.Name(rawValue: "ProfileImageProviderDidChange")
+    static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
     
     // MARK: - Private Properties
     private var lastTask: URLSessionTask?
@@ -68,6 +68,12 @@ final class ProfileImageService {
         task.resume()
     }
     
+    func cleanData() {
+        lastTask?.cancel()
+        lastTask = nil
+        avatarURL = nil
+    }
+    
     // MARK: - Private Methods
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURL)/users/\(username)") else {
@@ -76,7 +82,7 @@ final class ProfileImageService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }

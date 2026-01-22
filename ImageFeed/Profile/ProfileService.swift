@@ -67,6 +67,12 @@ final class ProfileService {
         task.resume()
     }
     
+    func cleanData() {
+        lastTask?.cancel()
+        lastTask = nil
+        profile = nil
+    }
+    
     // MARK: - Private Methods
     private func makeProfileRequest(token: String) -> URLRequest? {
         guard let url = URL(string: "\(Constants.defaultBaseURL)/me") else {
@@ -75,7 +81,7 @@ final class ProfileService {
         }
         
         var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        request.httpMethod = HTTPMethod.get.rawValue
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         return request
     }
