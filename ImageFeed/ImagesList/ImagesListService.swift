@@ -8,7 +8,7 @@
 import Foundation
 internal import CoreGraphics
 
-final class ImagesListService {
+final class ImagesListService: ImagesListServiceProtocol {
     // MARK: - Public Properties
     static let shared = ImagesListService()
     static let didChangeNotification = Notification.Name("ImagesListServiceDidChange")
@@ -128,7 +128,7 @@ final class ImagesListService {
     
     // MARK: - Private Methods
     private func makeImagesListRequest(token: String) -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURL)/photos/?page=\(lastLoadedPage + 1)&per_page=10") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos/?page=\(lastLoadedPage + 1)&per_page=10") else {
             print("[makeImagesListRequest]: Ошибка инициализации URL")
             return nil
         }
@@ -140,7 +140,7 @@ final class ImagesListService {
     }
     
     private func makeLikePhotoRequest(token: String, photoId: String, isLike: Bool) -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURL)/photos/\(photoId)/like") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/photos/\(photoId)/like") else {
             print("[makeLikePhotoRequest]: Ошибка инициализации URL")
             return nil
         }

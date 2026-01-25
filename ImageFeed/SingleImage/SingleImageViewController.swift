@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class SingleImageViewController: UIViewController {
+public final class SingleImageViewController: UIViewController {
     // MARK: - IB Outlets
     @IBOutlet private var imageView: UIImageView!
     @IBOutlet private var scrollView: UIScrollView!
@@ -23,7 +23,7 @@ final class SingleImageViewController: UIViewController {
     }
     
     // MARK: - Overrides Methods
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         
         scrollView.minimumZoomScale = 0.1
@@ -91,11 +91,11 @@ final class SingleImageViewController: UIViewController {
 
 extension SingleImageViewController: UIScrollViewDelegate {
     // MARK: - Public Methods
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
     }
     
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
+    public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         centerImage()
     }
 }
