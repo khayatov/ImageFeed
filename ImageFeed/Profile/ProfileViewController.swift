@@ -8,65 +8,31 @@
 import UIKit
 import Kingfisher
 
-final class ProfileViewController: UIViewController {
+final class ProfileViewController: UIViewController, ProfileViewControllerProtocol {
+    // MARK: - Public Properties
+    var presenter: ProfilePresenterProtocol?
+    
     // MARK: - Private Properties
-    private let profileService = ProfileService.shared
-    private let profileLogoutService = ProfileLogoutService.shared
-    private var profileImageServiceObserver: NSObjectProtocol?
     private let userImageView = UIImageView(image: UIImage(resource: .avatar))
     
     // MARK: - Overrides Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let profile = profileService.profile {
-            setupView(
-                userName: profile.name.isEmpty ? "Имя не указано" : profile.name,
-                userNickname: profile.loginName.isEmpty ? "@неизвестный_пользователь" : profile.loginName,
-                userAbout: ((profile.bio?.isEmpty ?? true) ? "Профиль не заполнен" : profile.bio) ?? "Профиль не заполнен"
-            )
-        }
-        
-        profileImageServiceObserver = NotificationCenter.default
-            .addObserver(
-                forName: ProfileImageService.didChangeNotification,
-                object: nil,
-                queue: .main
-            ) { [weak self] _ in
-                guard let self = self else { return }
-                self.updateAvatar()
-            }
-        updateAvatar()
-        
+        presenter?.viewDidLoad()
     }
     
-    // MARK: - Private Methods
-    @objc private func didTapLogoutButton(_ sender: Any) {
-        showLogoutAlert()
+    // MARK: - Public Methods
+    func configure(_ presenter: ProfilePresenterProtocol) {
+        self.presenter = presenter
+        presenter.view = self
     }
     
-    private func showLogoutAlert() {
-        let alertController = UIAlertController(
-            title: "Пока, пока!",
-            message: "Уверены, что хотите выйти?",
-            preferredStyle: .alert
-        )
-        let yesAction = UIAlertAction(title: "Да", style: .default) { _ in
-            self.profileLogoutService.logout()
-        }
-        let noAction = UIAlertAction(title: "Нет", style: .default, handler: nil)
-        
-        alertController.addAction(yesAction)
-        alertController.addAction(noAction)
+    func showLogoutAlert(alertController: UIAlertController) {
         present(alertController, animated: true, completion: nil)
     }
     
-    private func updateAvatar() {
-        guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let imageUrl = URL(string: profileImageURL)
-        else { return }
-        
+    func setupAvatar(_ imageUrl: URL) {
         let processor = RoundCornerImageProcessor(cornerRadius: 35)
         userImageView.kf.indicatorType = .activity
         userImageView.kf.setImage(
@@ -80,7 +46,7 @@ final class ProfileViewController: UIViewController {
             ])
     }
     
-    private func setupView(userName: String, userNickname: String, userAbout: String) {
+    func setupView(userName: String, userNickname: String, userAbout: String) {
         view.backgroundColor = UIColor.ypBlackIOS
         
         userImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -111,6 +77,7 @@ final class ProfileViewController: UIViewController {
         logoutButton.setImage(UIImage(resource: .exit), for: .normal)
         logoutButton.translatesAutoresizingMaskIntoConstraints = false
         logoutButton.addTarget(self, action: #selector(didTapLogoutButton), for: .touchUpInside)
+        logoutButton.accessibilityIdentifier = "logoutButton"
         view.addSubview(logoutButton)
         
         NSLayoutConstraint.activate([
@@ -136,5 +103,10 @@ final class ProfileViewController: UIViewController {
             logoutButton.widthAnchor.constraint(equalToConstant: 44),
             logoutButton.heightAnchor.constraint(equalToConstant: 44),
         ])
+    }
+    
+    // MARK: - Private Methods
+    @objc private func didTapLogoutButton(_ sender: Any) {
+        presenter?.didTapLogoutButton()
     }
 }
