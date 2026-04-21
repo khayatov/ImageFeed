@@ -8,7 +8,7 @@
 import Foundation
 import WebKit
 
-final class ProfileLogoutService {
+final class ProfileLogoutService: ProfileLogoutServiceProtocol {
     // MARK: - Private Properties
     private let oauth2Service = OAuth2Service.shared
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared

@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ProfileImageService {
+final class ProfileImageService: ProfileImageServiceProtocol {
     // MARK: - Public Properties
     static let shared = ProfileImageService()
     static let didChangeNotification = Notification.Name("ProfileImageProviderDidChange")
@@ -76,7 +76,7 @@ final class ProfileImageService {
     
     // MARK: - Private Methods
     private func makeProfileImageRequest(username: String, token: String) -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURL)/users/\(username)") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/users/\(username)") else {
             print("[makeProfileImageRequest]: Ошибка инициализации URL")
             return nil
         }

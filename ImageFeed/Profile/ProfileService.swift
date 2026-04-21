@@ -7,7 +7,7 @@
 
 import Foundation
 
-final class ProfileService {
+final class ProfileService: ProfileServiceProtocol {
     // MARK: - Public Properties
     static let shared = ProfileService()
     
@@ -75,7 +75,7 @@ final class ProfileService {
     
     // MARK: - Private Methods
     private func makeProfileRequest(token: String) -> URLRequest? {
-        guard let url = URL(string: "\(Constants.defaultBaseURL)/me") else {
+        guard let url = URL(string: "\(Constants.defaultBaseURLString)/me") else {
             print("[makeProfileRequest]: Ошибка инициализации URL")
             return nil
         }

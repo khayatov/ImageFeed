@@ -9,8 +9,6 @@ import UIKit
 
 final class SplashViewController: UIViewController {
     // MARK: - Private Properties
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
-    private let showImagesListScreenSegueIdentifier = "ShowImagesListScreen"
     private let oAuth2TokenStorage = OAuth2TokenStorage.shared
     private let profileService = ProfileService.shared
     private let profileImageService = ProfileImageService.shared
@@ -46,7 +44,7 @@ final class SplashViewController: UIViewController {
     private func presentAuthViewController() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
         guard
-            let navigationViewController = storyboard.instantiateViewController(withIdentifier: "NavigationViewController") as? UINavigationController,
+            let navigationViewController = storyboard.instantiateViewController(withIdentifier: Constants.navigationViewControllerIdentifier) as? UINavigationController,
             let authViewController = navigationViewController.topViewController as? AuthViewController
         else {
             assertionFailure("Не удалось найти AuthViewController по идентификатору")
@@ -64,7 +62,7 @@ final class SplashViewController: UIViewController {
         }
         
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
-            .instantiateViewController(withIdentifier: "TabBarViewController")
+            .instantiateViewController(withIdentifier: Constants.tabBarViewControllerIdentifier)
         
         window.rootViewController = tabBarController
     }
