@@ -9,7 +9,6 @@ import UIKit
 
 final class AuthViewController: UIViewController {
     // MARK: - Private Properties
-    private let webViewSegueIdentifier = "ShowWebView"
     private let oauth2Service = OAuth2Service.shared
     
     // MARK: - Public Properties
@@ -23,11 +22,11 @@ final class AuthViewController: UIViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == webViewSegueIdentifier {
+        if segue.identifier == Constants.webViewSegueIdentifier {
             guard
                 let webViewViewController = segue.destination as? WebViewViewController
             else {
-                assertionFailure("Failed to prepare for \(webViewSegueIdentifier)")
+                assertionFailure("Failed to prepare for \(Constants.webViewSegueIdentifier)")
                 return
             }
             let authHelper = AuthHelper()

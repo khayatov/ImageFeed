@@ -13,7 +13,7 @@ final class ImagesListViewTests: XCTestCase {
     
     func testViewControllerCallsViewDidLoad() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.imagesListViewControllerIdentifier) as! ImagesListViewController
         let presenter = ImagesListPresenterSpy()
         viewController.configure(presenter)
         
@@ -24,7 +24,7 @@ final class ImagesListViewTests: XCTestCase {
     
     func testPresenterCallsFetchPhotosNextPage() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.imagesListViewControllerIdentifier) as! ImagesListViewController
         
         let imageListService = ImageListServiceSpy()
         let presenter = ImagesListPresenter(imagesListService: imageListService)
@@ -37,7 +37,7 @@ final class ImagesListViewTests: XCTestCase {
     
     func testGetCountPhotos() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.imagesListViewControllerIdentifier) as! ImagesListViewController
         
         let imageListService = ImageListServiceSpy()
         for i in 1...3 {
@@ -62,7 +62,7 @@ final class ImagesListViewTests: XCTestCase {
     
     func testGetCellHeight() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.imagesListViewControllerIdentifier) as! ImagesListViewController
         
         let imageListService = ImageListServiceSpy()
         for i in 1...3 {
@@ -87,7 +87,7 @@ final class ImagesListViewTests: XCTestCase {
     
     func testPresenterChangeLikeCallsChangeLike() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "ImagesListViewController") as! ImagesListViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.imagesListViewControllerIdentifier) as! ImagesListViewController
         
         let imageListService = ImageListServiceSpy()
         for i in 1...3 {

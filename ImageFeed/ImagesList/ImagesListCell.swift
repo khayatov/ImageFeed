@@ -16,7 +16,6 @@ final class ImagesListCell: UITableViewCell {
     
     // MARK: - Public Properties
     weak var delegate: ImagesListCellDelegate?
-    static let reuseIdentifier = "ImagesListCell"
     
     // MARK: - Overrides Methods
     override func prepareForReuse() {

@@ -5,8 +5,6 @@
 //  Created by Andrey Khayatov on 25.01.26.
 //
 
-import Foundation
-
 import ImageFeed
 import Foundation
 

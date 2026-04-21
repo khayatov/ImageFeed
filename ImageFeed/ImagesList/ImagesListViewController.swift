@@ -16,7 +16,6 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     var presenter: ImagesListPresenterProtocol?
     
     // MARK: - Private Properties
-    private let showSingleImageSegueIdentifier = "ShowSingleImage"
     private let formatter = DateFormatter()
     private lazy var dateFormatter: DateFormatter = {
         formatter.dateStyle = .long
@@ -35,7 +34,7 @@ final class ImagesListViewController: UIViewController, ImagesListViewController
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showSingleImageSegueIdentifier {
+        if segue.identifier == Constants.showSingleImageSegueIdentifier {
             presenter?.prepareSingleImage(for: segue, sender: sender)
         } else {
             super.prepare(for: segue, sender: sender)
@@ -82,7 +81,7 @@ extension ImagesListViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: ImagesListCell.reuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Constants.imagesListCellIdentifier, for: indexPath)
         
         guard let imageListCell = cell as? ImagesListCell else {
             return UITableViewCell()
@@ -99,11 +98,7 @@ extension ImagesListViewController: UITableViewDataSource {
     
     // MARK: - Private Methods
     private func configCell(for cell: ImagesListCell, with indexPath: IndexPath) {
-        guard let photo = presenter?.getPhoto(indexPath.row) else {
-            return
-        }
-        
-        guard let imageUrl = URL(string: photo.thumbImageURL) else {
+        guard let photo = presenter?.getPhoto(indexPath.row), let imageUrl = URL(string: photo.thumbImageURL) else {
             return
         }
         
@@ -135,7 +130,7 @@ extension ImagesListViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: showSingleImageSegueIdentifier, sender: indexPath)
+        performSegue(withIdentifier: Constants.showSingleImageSegueIdentifier, sender: indexPath)
     }
 }
 

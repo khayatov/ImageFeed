@@ -12,7 +12,7 @@ import XCTest
 final class WebViewTests: XCTestCase {
     func testViewControllerCallsViewDidLoad() {
         let storyboard = UIStoryboard(name: "Main", bundle: .main)
-        let viewController = storyboard.instantiateViewController(withIdentifier: "WebViewViewController") as! WebViewViewController
+        let viewController = storyboard.instantiateViewController(withIdentifier: Constants.webViewViewControllerIdentifier) as! WebViewViewController
         let presenter = WebViewPresenterSpy()
         viewController.presenter = presenter
         presenter.view = viewController
@@ -78,7 +78,7 @@ final class WebViewTests: XCTestCase {
         let url = urlComponents.url!
         let authHelper = await MainActor.run { AuthHelper() }
         
-        let code = authHelper.code(from: url)
+        let code = authHelper.getCode(from: url)
         
         XCTAssertEqual(code, "test code")
     }

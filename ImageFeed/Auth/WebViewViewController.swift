@@ -24,7 +24,7 @@ final class WebViewViewController: UIViewController, WebViewViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        webView.accessibilityIdentifier = "authWebView"
+        webView.accessibilityIdentifier = Constants.authWebViewIdentifier
         webView.navigationDelegate = self
         
         presenter?.viewDidLoad()

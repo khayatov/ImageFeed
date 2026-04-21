@@ -17,9 +17,9 @@ final class AuthHelper: AuthHelperProtocol {
     }
     
     // MARK: - Public Methods
-    func authRequest() -> URLRequest? {
+    func createAuthURLRequest() -> URLRequest? {
         guard let url = authURL() else {
-            print("[authRequest]: Ошибка: URLComponents не сформировал url")
+            print("[createAuthURLRequest]: Ошибка: URLComponents не сформировал url")
             return nil
         }
         
@@ -42,7 +42,7 @@ final class AuthHelper: AuthHelperProtocol {
         return urlComponents.url
     }
     
-    func code(from url: URL) -> String? {
+    func getCode(from url: URL) -> String? {
         if let urlComponents = URLComponents(string: url.absoluteString),
            urlComponents.path == "/oauth/authorize/native",
            let items = urlComponents.queryItems,
